@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
-import HomeScreen from '../containers/HomeScreen';
-import ProfileScreen from '../containers/ProfileScreen';
-import { addListener } from '../utils/redux';
+import {
+  HomeScreen,
+  ProfileScreen
+} from './../containers';
 
 export const AppNavigatorStack = StackNavigator(
   {
