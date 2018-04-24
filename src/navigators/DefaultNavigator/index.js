@@ -23,6 +23,12 @@ class DefaultNavigator extends React.Component {
     });
   }
 
+  backTo = (screenIndex) => {
+    this.setState({
+      tabActive: screenIndex
+    });
+  }
+
   render() {
     const { tabList } = this.props;
     const { tabActive } = this.state;
@@ -45,7 +51,8 @@ class DefaultNavigator extends React.Component {
             currentTab && currentTab.header &&
             <Header
               title={currentTab.header.title}
-              component={currentTab.header.component}
+              backIcon={currentTab.header.backIcon}
+              backTo={this.backTo}
             />
           }
         </View>

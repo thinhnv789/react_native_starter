@@ -10,30 +10,35 @@ class AppNavigator extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+           
+        };
 
         this.tabList = [
             {
                 title: 'Home',
                 header: {
-                    component: null,
-                    title: 'Home'
+                    title: 'Home',
+                    backIcon: null//'md-arrow-back'
                 },
                 component: <HomeScreen/>
             },
             {
                 title: 'Profile',
                 header: {
-                    component: null,
-                    title: 'Profile'
+                    title: 'Profile',
+                    backIcon: 'md-arrow-back'
                 },
                 component: <ProfileScreen/>
             },
-        ]
+        ];
+        this.tabActive = 0;
     }
 
     render() {
         const { theme } = this.props;
+        const { tabActive } = this.state;
+
         switch(theme) {
             case 1:
                 break;
@@ -41,7 +46,7 @@ class AppNavigator extends React.Component {
                 return (
                     <DefaultNavigator
                         tabList={this.tabList}
-                        tabActive={0}
+                        tabActive={this.tabActive}
                     />
                 )
         }

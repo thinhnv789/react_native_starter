@@ -25,10 +25,6 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text>{ homeMenu ? homeMenu.test : 'Home Screen'}</Text>
-        <Button
-          title="Go to Profile"
-          onPress={() => this.props.navigation.navigate('Profile')}
-        />
       </View>
     );
   }
