@@ -1,5 +1,7 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 
+import UnAuthNavigator from './UnAuthNatigator';
 import DefaultNavigator from './DefaultNavigator';
 import {
     HomeScreen,
@@ -11,7 +13,7 @@ class AppNavigator extends React.Component {
         super(props);
 
         this.state = {
-           
+            isLoggedIn: false
         };
 
         this.tabList = [
@@ -30,27 +32,72 @@ class AppNavigator extends React.Component {
                     backIcon: 'md-arrow-back'
                 },
                 component: <ProfileScreen/>
-            },
+            }
         ];
         this.tabActive = 0;
     }
 
-    render() {
-        const { theme } = this.props;
-        const { tabActive } = this.state;
-
-        switch(theme) {
-            case 1:
-                break;
-            default:
-                return (
-                    <DefaultNavigator
-                        tabList={this.tabList}
-                        tabActive={this.tabActive}
-                    />
-                )
+    async componentDidMount() {
+        let isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+        
+        if (isLoggedIn) {
+            this.setState({
+                isLoggedIn: true
+            })
         }
     }
+
+    setUserLogin = (value) => {
+        this.setState({
+            isLoggedIn: true
+        });
+    }
+
+    logout = () => {
+        this.setState({
+            isLoggedIn: false
+        });
+        AsyncStorage.removeItem('isLoggedIn');
+    }
+
+    render() {
+        const { theme } = this.props;
+        const { tabActive, isLoggedIn } = this.state;
+
+        /**
+         * Navigator for user is logged in
+         */
+        if (isLoggedIn) {
+            switch(theme) {
+                case 1:
+                    break;
+                default:
+                    return (
+                        <DefaultNavigator
+                            tabList={this.tabList}
+                            tabActive={this.tabActive}
+                            logout={this.logout}
+                        />
+                    )
+            }
+        } else {
+            /**
+             * Navigator for user isn't logged in
+             */
+            switch(theme) {
+                default:
+                    return (
+                        <UnAuthNavigator
+                            setUserLogin={this.setUserLogin}
+                        />
+                    )
+            }
+        }
+    }
+}
+
+AppNavigator.defaultProps = {
+    theme: 0
 }
 
 export default AppNavigator;

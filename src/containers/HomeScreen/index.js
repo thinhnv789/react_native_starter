@@ -1,10 +1,13 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
+import io from 'socket.io-client';
+import { ToastAndroid, View, Text, Button } from 'react-native';
+
+import { getHomeMenu } from './../../actions/home';
+import { getLogout } from './../../actions/auth';
 
 import styles from './styles';
-import { getHomeMenu } from './../../actions/home';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -15,8 +18,23 @@ class HomeScreen extends React.Component {
 
   componentDidMount() {
     const { getHomeMenu } = this.props;
-
+  
     getHomeMenu();
+    
+    // const socket = io('http://192.168.42.51:8008');
+    // socket.on('connect', function(){
+    //   console.log('socket connected')
+    // });
+    // socket.on('event', function(data){});
+    // socket.on('disconnect', function(){
+    //   console.log('socket disconnected')
+    // });
+  }
+
+  logout = async () => {
+    const { getLogout } = this.props;
+    let logoutResult = await getLogout();
+    console.log('logoutResult', logoutResult);
   }
 
   render() {
@@ -25,6 +43,7 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text>{ homeMenu ? homeMenu.test : 'Home Screen'}</Text>
+        <Button title='Logout' onPress={() => this.logout()} />
       </View>
     );
   }
@@ -43,7 +62,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getHomeMenu:  bindActionCreators(getHomeMenu, dispatch)
+    getHomeMenu:  bindActionCreators(getHomeMenu, dispatch),
+    getLogout:  bindActionCreators(getLogout, dispatch)
   }
 }
 
